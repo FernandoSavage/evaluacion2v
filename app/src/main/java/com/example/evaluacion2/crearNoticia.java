@@ -55,7 +55,7 @@ public class crearNoticia extends AppCompatActivity {
 
     Bitmap bitmap;
 
-    CheckBox aricaq, iquiqueq, santiagoq;
+    CheckBox aricaq, iquiqueq, coquimboq, valparaisoq, concepcionq, puntaarenasq, santiagoq;
 
     boolean hayPermiso;
 
@@ -78,6 +78,10 @@ public class crearNoticia extends AppCompatActivity {
         foto = findViewById(R.id.fotoInput);
         aricaq = findViewById(R.id.aricaCheck);
         iquiqueq = findViewById(R.id.iquiqueCheck);
+        coquimboq = findViewById(R.id.coquimboCheck);
+        valparaisoq = findViewById(R.id.valparaisoCheck);
+        concepcionq = findViewById(R.id.concepcionCheck);
+        puntaarenasq = findViewById(R.id.puntaarenasCheck);
         santiagoq = findViewById(R.id.santiagoCheck);
         saludoo = findViewById(R.id.saludo);
 
@@ -100,7 +104,7 @@ public class crearNoticia extends AppCompatActivity {
                 if(snapshot.exists()){
                     String nombre = snapshot.child("nombre").getValue().toString();
 
-                    saludoo.setText("'Bombero " + nombre + "'");
+                    saludoo.setText("Saludos, " + nombre);
 
                 }
                 else {
@@ -199,32 +203,38 @@ public class crearNoticia extends AppCompatActivity {
         if(aricaq.isChecked()){
             noticia.setUbicacion("Arica");
         }
+        if(coquimboq.isChecked()){
+            noticia.setUbicacion("Coquimbo");
+        }
+        if(valparaisoq.isChecked()){
+            noticia.setUbicacion("Valparaíso");
+        }
         if(santiagoq.isChecked()){
             noticia.setUbicacion("Santiago");
         }
+        if(concepcionq.isChecked()){
+            noticia.setUbicacion("Concepción");
+        }
+        if(puntaarenasq.isChecked()){
+            noticia.setUbicacion("Punta Arenas");
+        }
+
 
         reference.child("noticias").child(usuarioActual.getUid()).child("noticia_"+uniqueID).setValue(noticia);
 
         if(titulo.getText().toString().equals("") || descripcion.getText().toString().equals("")){
-            Toast.makeText(this,"No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
+            camposVacios();
         }
         else if(titulo.getText().toString().equals("") && descripcion.getText().toString().equals("")){
-            Toast.makeText(this,"No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
+            camposVacios();
         }
-        else if(iquiqueq.isChecked() == false && aricaq.isChecked() == false && santiagoq.isChecked() == false){
-            Toast.makeText(this, "No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
+        else if(iquiqueq.isChecked() == false && aricaq.isChecked() == false && coquimboq.isChecked() == false && valparaisoq.isChecked() == false && santiagoq.isChecked() == false
+                && concepcionq.isChecked() == false && puntaarenasq.isChecked() == false){
+            camposVacios();
         }
-        else if(iquiqueq.isChecked() == true && aricaq.isChecked() == true && aricaq.isChecked() == true){
-            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
-        }
-        else if(iquiqueq.isChecked() == true && aricaq.isChecked() == true){
-            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
-        }
-        else if(iquiqueq.isChecked() == true && santiagoq.isChecked() == true){
-            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
-        }
-        else if(santiagoq.isChecked() == true && aricaq.isChecked() == true){
-            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+        else if(iquiqueq.isChecked() == true && aricaq.isChecked() == true && coquimboq.isChecked() == true && valparaisoq.isChecked() == true && santiagoq.isChecked() == true
+                && concepcionq.isChecked() == true && puntaarenasq.isChecked() == true){
+            alertaUbicacion();
         }
         else{
             noticias.add(noticia);
@@ -236,7 +246,11 @@ public class crearNoticia extends AppCompatActivity {
             descripcion.setText("");
             aricaq.setChecked(false);
             iquiqueq.setChecked(false);
+            coquimboq.setChecked(false);
+            valparaisoq.setChecked(false);
             santiagoq.setChecked(false);
+            concepcionq.setChecked(false);
+            puntaarenasq.setChecked(false);
         }
     }
 
@@ -255,5 +269,13 @@ public class crearNoticia extends AppCompatActivity {
         mAuth.signOut();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void alertaUbicacion(){
+        Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+    }
+
+    public void camposVacios(){
+        Toast.makeText(this, "No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
     }
 }

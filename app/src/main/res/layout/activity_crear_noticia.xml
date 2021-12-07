@@ -15,7 +15,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
@@ -31,22 +31,15 @@
             android:layout_height="144dp"
             tools:srcCompat="@tools:sample/avatars" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/saludo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#009688"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="140dp"
-        android:text="Fotografía"
-        android:textColor="#707171"
-        android:textColorHighlight="#000000"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.744"
-        app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
@@ -96,42 +89,6 @@
             android:text="Cerrar sesión" />
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/aricaCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Arica"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.478" />
-
-    <CheckBox
-        android:id="@+id/iquiqueCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iquique"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.783"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.239" />
-
-    <CheckBox
-        android:id="@+id/santiagoCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Santiago"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.805"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.359" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -141,10 +98,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.912"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintVertical_bias="0.519" />
 
     <TextView
         android:id="@+id/textView10"
@@ -201,20 +158,6 @@
         app:layout_constraintVertical_bias="0.185" />
 
     <TextView
-        android:id="@+id/saludo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#009688"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -228,5 +171,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.037" />
+
+    <ScrollView
+        android:layout_width="158dp"
+        android:layout_height="173dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.942">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/aricaCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Arica" />
+
+            <CheckBox
+                android:id="@+id/iquiqueCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Iquique" />
+
+            <CheckBox
+                android:id="@+id/coquimboCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Coquimbo" />
+
+            <CheckBox
+                android:id="@+id/valparaisoCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Valparaíso" />
+
+            <CheckBox
+                android:id="@+id/santiagoCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Santiago" />
+
+            <CheckBox
+                android:id="@+id/concepcionCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Concepción" />
+
+            <CheckBox
+                android:id="@+id/puntaarenasCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Punta Arenas" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

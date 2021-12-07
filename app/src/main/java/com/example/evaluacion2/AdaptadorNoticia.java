@@ -44,22 +44,44 @@ public class AdaptadorNoticia extends RecyclerView.Adapter<AdaptadorNoticia.View
                 String arica = "Ciudad: Arica";
                 String santiago = "Ciudad: Santiago";
                 String iquique = "Ciudad: Iquique";
+                String coquimbo = "Ciudad: Coquimbo";
+                String valparaiso = "Ciudad: Valparaíso";
+                String concepcion = "Ciudad: Concepción";
+                String puntaarenas = "Ciudad: Punta Arenas";
 
                 if (arica.equals(ciudad)){
                     Intent intent = new Intent(view.getContext(), MapsActivity.class);
                     intent.putExtra("ciudad", "arica");
                     view.getContext().startActivity(intent);
                 }
-
                 if (iquique.equals(ciudad)){
                     Intent intent = new Intent(view.getContext(), MapsActivity.class);
                     intent.putExtra("ciudad", "iquique");
                     view.getContext().startActivity(intent);
                 }
-
                 if (santiago.equals(ciudad)){
                     Intent intent = new Intent(view.getContext(), MapsActivity.class);
                     intent.putExtra("ciudad", "santiago");
+                    view.getContext().startActivity(intent);
+                }
+                if (coquimbo.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "coquimbo");
+                    view.getContext().startActivity(intent);
+                }
+                if (valparaiso.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "valparaíso");
+                    view.getContext().startActivity(intent);
+                }
+                if (concepcion.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "concepción");
+                    view.getContext().startActivity(intent);
+                }
+                if (puntaarenas.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "punta arenas");
                     view.getContext().startActivity(intent);
                 }
             }

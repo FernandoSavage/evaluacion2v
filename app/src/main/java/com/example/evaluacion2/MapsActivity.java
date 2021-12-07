@@ -56,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(arica, 15));
         }
-
         if ("iquique".equals(recibido)){
             LatLng iquique = new LatLng(-20.22036, -70.13913);
             mMap.addMarker(new MarkerOptions().position(iquique)
@@ -65,7 +64,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(iquique, 15));
         }
-
         if("santiago".equals(recibido)){
             LatLng santiago = new LatLng(-33.45694,-70.64827);
             mMap.addMarker(new MarkerOptions().position(santiago)
@@ -73,6 +71,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_santiago))
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(santiago, 15));
+        }
+        if("coquimbo".equals(recibido)){
+            LatLng coquimbo = new LatLng(-29.95332,-71.33947);
+            mMap.addMarker(new MarkerOptions().position(coquimbo)
+                    .title("Los Piratas")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_coquimbo))
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coquimbo, 15));
+        }
+        if("valparaíso".equals(recibido)){
+            LatLng valparaiso = new LatLng(-33.03932,-71.62725);
+            mMap.addMarker(new MarkerOptions().position(valparaiso)
+                    .title("Ciudad del Puerto")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_valparaiso))
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(valparaiso, 15));
+        }
+        if("concepción".equals(recibido)){
+            LatLng concepcion = new LatLng(-36.82699,-73.04977);
+            mMap.addMarker(new MarkerOptions().position(concepcion)
+                    .title("Concepción")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_concepcion))
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(concepcion, 15));
+        }
+        if("punta arenas".equals(recibido)){
+            LatLng puntaarenas = new LatLng(-53.15483,-70.91129);
+            mMap.addMarker(new MarkerOptions().position(puntaarenas)
+                    .title("Punta Arenas")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_puntaarenas))
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(puntaarenas, 15));
         }
     }
 }
