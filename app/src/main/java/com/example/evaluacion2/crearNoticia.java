@@ -25,32 +25,53 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 public class crearNoticia extends AppCompatActivity {
 
     ArrayList<Noticia> noticias;
-    TextView titulo;
-    TextView descripcion;
-    ImageView foto;
-    Bitmap bitmap;
-    CheckBox aricaq, iquiqueq, santiagoq;
-    TextView nombre;
 
-    String[] permisos = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    TextView titulo, descripcion, saludoo;
+
+    ImageView foto;
+
+    Bitmap bitmap;
+
+    CheckBox aricaq, iquiqueq, santiagoq;
+
+    boolean hayPermiso;
+
+    FirebaseAuth mAuth;
+    FirebaseUser usuarioActual;
+    FirebaseDatabase dataBase;
+    DatabaseReference reference;
+
+    String[] permisos = {Manifest.permission.CAMERA};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_noticia);
 
+        hayPermiso = false;
         bitmap = null;
         titulo = findViewById(R.id.tituloInput);
         descripcion = findViewById(R.id.descripcionInput);
@@ -58,165 +79,131 @@ public class crearNoticia extends AppCompatActivity {
         aricaq = findViewById(R.id.aricaCheck);
         iquiqueq = findViewById(R.id.iquiqueCheck);
         santiagoq = findViewById(R.id.santiagoCheck);
-        nombre = findViewById(R.id.saludo);
+        saludoo = findViewById(R.id.saludo);
 
-        String saludoUsuario = getIntent().getStringExtra("nombre");
-        nombre.setText(saludoUsuario);
+        mAuth = FirebaseAuth.getInstance();
+        usuarioActual = mAuth.getCurrentUser();
+
+        dataBase = FirebaseDatabase.getInstance();
+        reference = dataBase.getReference();
 
         noticias = new ArrayList<Noticia>();
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
             requestPermissions(permisos, 100);
         }
+
+        String id = mAuth.getCurrentUser().getUid();
+        reference.child("Usuario").child(id).child("Datos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String nombre = snapshot.child("nombre").getValue().toString();
+
+                    saludoo.setText("'Bombero " + nombre + "'");
+
+                }
+                else {
+                    Toast.makeText(crearNoticia.this, "No se encontraron datos", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(crearNoticia.this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void comprobarPermisos(){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                hayPermiso = true;
+            }
+            else{
+                solicitarPermisos();
+            }
+        }
+    }
+
+    private void solicitarPermisos(){
+        new AlertDialog.Builder(this)
+                .setTitle("Se requiere permisos de cámara")
+                .setMessage("Esta aplicación hace uso de la cámara. Por favor, otorge este permiso para que la aplicación funcione correctamente")
+                .setPositiveButton("Ver permiso", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        requestPermissions(permisos,100);
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        boolean cerrarApp = false;
-
         if(requestCode == 100){
-            if(!(grantResults[0] == PackageManager.PERMISSION_GRANTED)){
-                Toast.makeText(this,"Se requiere permiso de cámara", Toast.LENGTH_SHORT).show();
-                cerrarApp = true;
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                hayPermiso = true;
             }
-            if(!(grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                Toast.makeText(this,"Se requiere permiso de escritura", Toast.LENGTH_SHORT).show();
-                cerrarApp = true;
+            else {
+                Toast.makeText(this,"Se requieren permisos de cámara para funcionar", Toast.LENGTH_SHORT).show();
             }
-            if(!(grantResults[2] == PackageManager.PERMISSION_GRANTED)){
-                Toast.makeText(this,"Se requiere permiso de lectura", Toast.LENGTH_SHORT).show();
-                cerrarApp = true;
-            }
-        }
-
-        if(cerrarApp){
-            Toast.makeText(this,"Tiene que otorgar los permisos necesarios", Toast.LENGTH_SHORT);
-            finishAffinity();
-            System.exit(0);
         }
     }
 
     public void tomarFoto(View view){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 21);
-    }
+        comprobarPermisos();
 
-    public void guardarFotoEnMemoria(View view){
-        OutputStream streamSalida = null;
-        File archivoFoto = null;
-        String nombreArchivo = "";
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            ContentResolver resolver = getContentResolver();
-            ContentValues valores = new ContentValues();
-
-            nombreArchivo = System.currentTimeMillis()+"_fotonoticia";
-
-            valores.put(MediaStore.Images.Media.DISPLAY_NAME, nombreArchivo);
-            valores.put(MediaStore.Images.Media.MIME_TYPE,"Image/jpg");
-            valores.put(MediaStore.Images.Media.RELATIVE_PATH, "Fotos/MiApp");
-            valores.put(MediaStore.Images.Media.IS_PENDING, 1);
-
-            Uri coleccion = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-            Uri fotoUri = resolver.insert(coleccion, valores);
-
-            try{
-                streamSalida = resolver.openOutputStream(fotoUri);
-            }
-            catch (FileNotFoundException e){
-                e.printStackTrace();
-            }
-
-            valores.clear();
-            valores.put(MediaStore.Images.Media.IS_PENDING, 0);
-            resolver.update(fotoUri,valores,null,null);
-
+        if(hayPermiso){
+            Intent intento = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intento, 0);
         }
-        else{
-            String ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            nombreArchivo = System.currentTimeMillis()+"_fotonoticia.jpg";
-            archivoFoto = new File(ruta, nombreArchivo);
-
-            try{
-                streamSalida = new FileOutputStream(archivoFoto);
-            }
-            catch (FileNotFoundException e){
-                e.printStackTrace();
-            }
-
-        }
-
-        if(bitmap!=null){
-            boolean fotoGuardada = bitmap.compress(Bitmap.CompressFormat.JPEG,100, streamSalida);
-
-            if(fotoGuardada){
-                Toast.makeText(this, "Foto guardada exitosamente",Toast.LENGTH_SHORT).show();
-            }
-
-            if(streamSalida != null){
-                try{
-                    streamSalida.flush();
-                    streamSalida.close();
-                }
-                catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-
-            if(archivoFoto != null){
-                MediaScannerConnection.scanFile(this, new String[]{archivoFoto.toString()}, null,null);
-
-            }
-        }
-        else{
-            Toast.makeText(this, "Primero debe tomar una foto", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void recuperarDeGaleria(View view){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 300);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
-            case 21:
-                if(resultCode == RESULT_OK){
-                    bitmap = (Bitmap) data.getExtras().get("data");
-                    foto.setImageBitmap(bitmap);
-                }
-                break;
-
-            case 300:
-                if(resultCode == RESULT_OK){
-                    Uri ruta = data.getData();
-                    foto.setImageURI(ruta);
-                }
-                break;
-            default:
-                System.out.println("xd");
+        if(resultCode == RESULT_OK) {
+            Bitmap b = (Bitmap) data.getExtras().get("data");
+            foto.setImageBitmap(b);
         }
-
     }
 
+
     public void guardarNoticia(View view){
+
+        String uniqueID = UUID.randomUUID().toString();
         Noticia noticia = new Noticia();
         noticia.setFoto(R.drawable.ic_launcher_background);
         noticia.setTitulo(titulo.getText().toString());
         noticia.setDescripcion(descripcion.getText().toString());
+
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         String tiempo = simpleDateFormat.format(new Date());
         noticia.setFecha(tiempo);
 
         if(iquiqueq.isChecked()){
-            Toast.makeText(this,"NXDD campos vacíos", Toast.LENGTH_SHORT).show();
+            noticia.setUbicacion("Iquique");
         }
+        if(aricaq.isChecked()){
+            noticia.setUbicacion("Arica");
+        }
+        if(santiagoq.isChecked()){
+            noticia.setUbicacion("Santiago");
+        }
+
+        reference.child("noticias").child(usuarioActual.getUid()).child("noticia_"+uniqueID).setValue(noticia);
 
         if(titulo.getText().toString().equals("") || descripcion.getText().toString().equals("")){
             Toast.makeText(this,"No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
@@ -224,13 +211,38 @@ public class crearNoticia extends AppCompatActivity {
         else if(titulo.getText().toString().equals("") && descripcion.getText().toString().equals("")){
             Toast.makeText(this,"No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
         }
-
+        else if(iquiqueq.isChecked() == false && aricaq.isChecked() == false && santiagoq.isChecked() == false){
+            Toast.makeText(this, "No debe dejar campos vacíos", Toast.LENGTH_SHORT).show();
+        }
+        else if(iquiqueq.isChecked() == true && aricaq.isChecked() == true && aricaq.isChecked() == true){
+            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+        }
+        else if(iquiqueq.isChecked() == true && aricaq.isChecked() == true){
+            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+        }
+        else if(iquiqueq.isChecked() == true && santiagoq.isChecked() == true){
+            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+        }
+        else if(santiagoq.isChecked() == true && aricaq.isChecked() == true){
+            Toast.makeText(this, "Debe seleccionar solo una ubicación", Toast.LENGTH_SHORT).show();
+        }
         else{
             noticias.add(noticia);
             Intent intento = new Intent(this, VisorNoticias.class);
             intento.putExtra("noticia", noticias);
-            Toast.makeText(this,"¡Registro de noticia exitoso!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"El siniestro se ha guardado correctamente", Toast.LENGTH_SHORT).show();
+
+            titulo.setText("");
+            descripcion.setText("");
+            aricaq.setChecked(false);
+            iquiqueq.setChecked(false);
+            santiagoq.setChecked(false);
         }
+    }
+
+    public void verInfo(View view){
+        Intent intent = new Intent(this, DatosPersonales.class);
+        startActivity(intent);
     }
 
     public void verNoticias(View view){
@@ -240,28 +252,8 @@ public class crearNoticia extends AppCompatActivity {
     }
 
     public void cerrarSesion(View view){
+        mAuth.signOut();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    public void verUbicacion(View view){
-
-        if(aricaq.isChecked()){
-            Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("ciudad", "arica");
-            startActivity(intent);
-        }
-
-        if(iquiqueq.isChecked()){
-            Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("ciudad", "iquique");
-            startActivity(intent);
-        }
-
-        if(santiagoq.isChecked()){
-            Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("ciudad", "santiago");
-            startActivity(intent);
-        }
     }
 }

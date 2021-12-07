@@ -35,22 +35,41 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10px"
                     android:paddingBottom="4sp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/fechaNoticia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="4sp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/descripcionNoticia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="4sp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ubicacionNoticia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/verUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#4CAF50"
+                    android:text="Ver ubicación"
+                    android:textSize="16sp" />
             </LinearLayout>
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

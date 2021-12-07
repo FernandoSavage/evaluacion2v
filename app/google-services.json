@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "853793850445",
+    "firebase_url": "https://reportero-ciudadano21-default-rtdb.firebaseio.com",
+    "project_id": "reportero-ciudadano21",
+    "storage_bucket": "reportero-ciudadano21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853793850445:android:9fc1c0cf4a66cec400c804",
+        "android_client_info": {
+          "package_name": "com.example.evaluacion2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853793850445-6calb4qg2p2grul288tkda1l44sh74o1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPjBZWJVQHjVCVVVseH_hs2h-H3rVxnJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853793850445-6calb4qg2p2grul288tkda1l44sh74o1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

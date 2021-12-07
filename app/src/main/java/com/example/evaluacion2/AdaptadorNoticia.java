@@ -1,10 +1,13 @@
 package com.example.evaluacion2;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +35,35 @@ public class AdaptadorNoticia extends RecyclerView.Adapter<AdaptadorNoticia.View
         holder.titulo.setText("Título: "+noticias.get(position).getTitulo());
         holder.fecha.setText("Fecha: "+noticias.get(position).getFecha());
         holder.descripcion.setText("Descripción: "+noticias.get(position).getDescripcion());
+        holder.ubicacion.setText("Ciudad: "+noticias.get(position).getUbicacion());
+        holder.verMapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String ciudad = holder.ubicacion.getText().toString();
+                String arica = "Ciudad: Arica";
+                String santiago = "Ciudad: Santiago";
+                String iquique = "Ciudad: Iquique";
+
+                if (arica.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "arica");
+                    view.getContext().startActivity(intent);
+                }
+
+                if (iquique.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "iquique");
+                    view.getContext().startActivity(intent);
+                }
+
+                if (santiago.equals(ciudad)){
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("ciudad", "santiago");
+                    view.getContext().startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -45,6 +77,8 @@ public class AdaptadorNoticia extends RecyclerView.Adapter<AdaptadorNoticia.View
         private TextView titulo;
         private TextView fecha;
         private TextView descripcion;
+        private TextView ubicacion;
+        private Button verMapa;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -53,6 +87,9 @@ public class AdaptadorNoticia extends RecyclerView.Adapter<AdaptadorNoticia.View
             titulo = itemView.findViewById(R.id.tituloNoticia);
             fecha = itemView.findViewById(R.id.fechaNoticia);
             descripcion = itemView.findViewById(R.id.descripcionNoticia);
+            ubicacion = itemView.findViewById(R.id.ubicacionNoticia);
+            verMapa = itemView.findViewById(R.id.verUbicacion);
         }
+
     }
 }

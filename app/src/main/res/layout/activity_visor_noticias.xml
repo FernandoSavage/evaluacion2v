@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Registro de noticias"
+        android:text="Registro de Siniestros"
         android:textColor="#009688"
         android:textSize="24sp"
         android:textStyle="bold"
